@@ -17,7 +17,10 @@ interface Coin {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  searchText = '';
   coins: Coin[] = [];
+  filteredCoins: Coin[] = [];
+  titles: string[] = ['#', 'Coin', 'Price', 'Price change', '24h Volume'];
 
   constructor(private http: HttpClient) {}
 
@@ -32,8 +35,16 @@ export class AppComponent implements OnInit {
         (res) => {
           console.log(res);
           this.coins = res;
+          this.filteredCoins = res;
         },
         (err) => console.log(err)
       );
+  }
+  searchCoin() {
+    this.filteredCoins = this.coins.filter(
+      (coin) =>
+        coin.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        coin.symbol.toLowerCase().includes(this.searchText.toLowerCase())
+    );
   }
 }
